@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const Comment = require('./models/comments'); // Import the Comment model
+const Comment = require('./models/Comments.js'); // Import the Comment model
 
 const app = express();
 const port = 5000;
@@ -62,18 +62,9 @@ app.get('/api/comments/search', async (req, res) => {
 
 // Route to delete a comment by ID
 app.delete('/api/comments/:id', async (req, res) => {
-    try {
-      const { id } = req.params; // Extract the ID from the request parameters
-      const deletedComment = await Comment.findByIdAndDelete(id); // Find and delete the comment by ID
-  
-      if (deletedComment) {
-        res.status(200).json(deletedComment); // Send the deleted comment back to the client
-      } else {
-        res.status(404).json({ message: 'Comment not found' }); // Handle case where comment is not found
-      }
-    } catch (err) {
-      res.status(500).json({ error: err.message }); // Handle errors
-    }
+    const { id } = req.params;
+    const updated = await Comment.findByIdAndUpdate(id, {isDeleted: true}, {new: true});
+    res.status(200).json(updated);
   });
 
 app.listen(port, () => {
