@@ -71,15 +71,11 @@ function App() {
     }
   };
 
-  // "Delete" a comment from the screen (not from the database)
   const handleDelete = (id) => {
-    setComments(comments.map(comment =>
-      comment._id === id ? { ...comment, isDeleted: true } : comment
-    ));
-    setFilteredComments(filteredComments.map(comment =>
-      comment._id === id ? { ...comment, isDeleted: true } : comment
-    ));
+    axios.delete(`http://localhost:5000/api/comments/${id}`)
+    setFilteredComments(filteredComments.map(comment => comment._id === id ? { ...comment, isDeleted: true } : comment));
   };
+  
 
   // Enable edit mode for a comment
   const handleEdit = (id, content) => {
